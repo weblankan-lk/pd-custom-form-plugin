@@ -1,62 +1,94 @@
 .cfb-form label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
+  display: block;
+  /* font-weight: bold; */
+  margin-bottom: 5px;
 }
 
 .cfb-form input,
-.cfb-form select {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
+.cfb-form select,
+.cfb-form textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
 }
 
 .cfb-form input[type="file"] {
-    border: none;
+  border: none;
 }
 
 .cfb-form button {
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
 }
 
 .cfb-form button:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
 
-
-input, select {
-    display: block;
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+input,
+select {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
-input:focus, select:focus {
-    border-color: #007bff;
-    outline: none;
+input:focus,
+select:focus {
+  border-color: #007bff;
+  outline: none;
 }
 
 button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    cursor: pointer;
-    border-radius: 4px;
+  /* background-color: #007bff; */
+  /* color: white; */
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
 }
 
 button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+  display: block;
+}
+
+.cfb_checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cfb_checkbox div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.cfb_checkbox div input {
+  margin: 0;
+  margin-right: 5px;
+  width: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
