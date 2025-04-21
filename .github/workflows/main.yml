@@ -1,8 +1,6 @@
 name: Deploy To Live
 
 
-env:
-  TARGET_DIR: /home/latestdpmc/public_html/assetlinecapital.lk/pd-assetline-capital-web
 on:
   pull_request:
     types:
@@ -47,7 +45,12 @@ jobs:
           git remote set-url origin https://x-access-token:${GH_PAT}@github.com/${{ github.repository }}.git
           git push origin $TAG_NAME
 
-      - name: Create GitHub release
+      - name: Create plugin ZIP
+        run: |
+          mkdir -p release
+          zip -r release/plugin.zip . -x "*.git*" "*.github*" "*.DS_Store" "node_modules/*" "release/*"
+
+      - name: Create GitHub release with ZIP
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.TAG_NAME }}
@@ -55,5 +58,6 @@ jobs:
           body: "Automated release for Live Push ${{ github.sha }}"
           draft: false
           prerelease: false
+          files: release/plugin.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
