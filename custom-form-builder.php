@@ -76,7 +76,7 @@ if (!class_exists('Custom_Form_Builder_Updater')) {
                 'name' => 'Custom Form Builder',
                 'slug' => $this->plugin_slug,
                 'version' => $release->tag_name,
-                'author' => '<a href="https://github.com/yourusername">Insaf Inhaam</a>',
+                'author' => '<a href="https://github.com/insafinhaam">Insaf Inhaam</a>',
                 'homepage' => $release->html_url,
                 'download_link' => $release->assets[0]->browser_download_url ?? '',
                 'sections' => [
@@ -215,11 +215,17 @@ function cfb_form_shortcode($atts)
     $subject = get_post_meta($form_id, 'cfb_subject', true);
     $custom_code = get_post_meta($form_id, 'cfb_custom_code', true);
 
+    $recaptcha_html = '';
+    $site_key = get_option('cfb_recaptcha_site_key');
+    if (!empty($site_key)) {
+        $recaptcha_html = '<div class="g-recaptcha" data-sitekey="' . esc_attr($site_key) . '"></div>';
+    }
+
     return '<form id="cfb-form" action="" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="cfb_form_id" value="' . esc_attr($form_id) . '">
                 <input type="hidden" name="cfb_subject" value="' . esc_attr($subject) . '">
                 ' . do_shortcode($custom_code) . '
-
+                ' . $recaptcha_html . '
                 <p id="cfb-error-message" style="color: red; display: none;"></p>
             </form>';
 }

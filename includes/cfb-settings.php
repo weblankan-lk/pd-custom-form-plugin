@@ -3,7 +3,8 @@
 
 
 // Render the Settings Page
-function cfb_render_smtp_mailchimp_settings_page() {
+function cfb_render_smtp_mailchimp_settings_page()
+{
     ?>
     <div class="wrap">
         <h1>SMTP & Mailchimp Settings</h1>
@@ -33,6 +34,10 @@ function cfb_register_smtp_mailchimp_settings()
     register_setting('cfb_smtp_mailchimp_options_group', 'cfb_mailchimp_api_key');
     register_setting('cfb_smtp_mailchimp_options_group', 'cfb_mailchimp_list_id');
     register_setting('cfb_smtp_mailchimp_options_group', 'cfb_mailchimp_server');
+
+    // reCAPTCHA
+    register_setting('cfb_smtp_mailchimp_options_group', 'cfb_recaptcha_site_key');
+    register_setting('cfb_smtp_mailchimp_options_group', 'cfb_recaptcha_secret_key');
 }
 
 add_action('admin_init', 'cfb_register_smtp_mailchimp_settings');
@@ -118,48 +123,95 @@ function cfb_add_smtp_mailchimp_settings_fields()
         'cfb_smtp_mailchimp_settings',
         'cfb_mailchimp_settings_section'
     );
+
+    // reCAPTCHA
+    add_settings_section(
+        'cfb_recaptcha_settings_section',
+        'reCAPTCHA Settings',
+        null,
+        'cfb_smtp_mailchimp_settings'
+    );
+
+    add_settings_field(
+        'cfb_recaptcha_site_key',
+        'reCAPTCHA Site Key',
+        function () {
+            echo "<input type='text' name='cfb_recaptcha_site_key' value='" . esc_attr(get_option('cfb_recaptcha_site_key')) . "' />";
+        },
+        'cfb_smtp_mailchimp_settings',
+        'cfb_recaptcha_settings_section'
+    );
+
+    add_settings_field(
+        'cfb_recaptcha_secret_key',
+        'reCAPTCHA Secret Key',
+        function () {
+            echo "<input type='text' name='cfb_recaptcha_secret_key' value='" . esc_attr(get_option('cfb_recaptcha_secret_key')) . "' />";
+        },
+        'cfb_smtp_mailchimp_settings',
+        'cfb_recaptcha_settings_section'
+    );
 }
 
 add_action('admin_init', 'cfb_add_smtp_mailchimp_settings_fields');
 
 // Callback functions for each field
-function cfb_smtp_host_field() {
+function cfb_smtp_host_field()
+{
     $smtp_host = get_option('cfb_smtp_host');
     echo "<input type='text' name='cfb_smtp_host' value='" . esc_attr($smtp_host) . "' />";
 }
 
-function cfb_smtp_username_field() {
+function cfb_smtp_username_field()
+{
     $smtp_username = get_option('cfb_smtp_username');
     echo "<input type='text' name='cfb_smtp_username' value='" . esc_attr($smtp_username) . "' />";
 }
 
-function cfb_smtp_password_field() {
+function cfb_smtp_password_field()
+{
     $smtp_password = get_option('cfb_smtp_password');
     echo "<input type='password' name='cfb_smtp_password' value='" . esc_attr($smtp_password) . "' />";
 }
 
-function cfb_smtp_port_field() {
+function cfb_smtp_port_field()
+{
     $smtp_port = get_option('cfb_smtp_port');
     echo "<input type='text' name='cfb_smtp_port' value='" . esc_attr($smtp_port) . "' />";
 }
 
-function cfb_smtp_secure_field() {
+function cfb_smtp_secure_field()
+{
     $smtp_secure = get_option('cfb_smtp_secure');
     echo "<input type='text' name='cfb_smtp_secure' value='" . esc_attr($smtp_secure) . "' />";
 }
 
-function cfb_mailchimp_api_key_field() {
+function cfb_mailchimp_api_key_field()
+{
     $mailchimp_api_key = get_option('cfb_mailchimp_api_key');
     echo "<input type='text' name='cfb_mailchimp_api_key' value='" . esc_attr($mailchimp_api_key) . "' />";
 }
 
-function cfb_mailchimp_list_id_field() {
+function cfb_mailchimp_list_id_field()
+{
     $mailchimp_list_id = get_option('cfb_mailchimp_list_id');
     echo "<input type='text' name='cfb_mailchimp_list_id' value='" . esc_attr($mailchimp_list_id) . "' />";
 }
 
-function cfb_mailchimp_server_field() {
+function cfb_mailchimp_server_field()
+{
     $mailchimp_server = get_option('cfb_mailchimp_server');
     echo "<input type='text' name='cfb_mailchimp_server' value='" . esc_attr($mailchimp_server) . "' />";
 }
 
+
+// Enqueue reCAPTCHA Script
+
+function cfb_enqueue_recaptcha_script()
+{
+    $site_key = get_option('cfb_recaptcha_site_key');
+    if (!empty($site_key)) {
+        wp_enqueue_script('google-recaptcha', 'https://www.google.com/recaptcha/api.js', [], null, true);
+    }
+}
+add_action('wp_enqueue_scripts', 'cfb_enqueue_recaptcha_script');

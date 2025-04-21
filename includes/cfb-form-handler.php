@@ -33,6 +33,28 @@ function cfb_handle_form_submission()
         // $email_content .= "<p><strong>Message:</strong> $message</p>";
         // $email_content .= "</body></html>";
 
+
+        $secret_key = get_option('cfb_recaptcha_secret_key');
+        $recaptcha_response = $_POST['g-recaptcha-response'] ?? '';
+
+        if ($secret_key && $recaptcha_response) {
+            $verify_response = wp_remote_post("https://www.google.com/recaptcha/api/siteverify", [
+                'body' => [
+                    'secret' => $secret_key,
+                    'response' => $recaptcha_response,
+                    'remoteip' => $_SERVER['REMOTE_ADDR']
+                ]
+            ]);
+
+            $response_body = json_decode(wp_remote_retrieve_body($verify_response));
+            if (empty($response_body->success)) {
+                wp_die('reCAPTCHA verification failed. Please try again.');
+            }
+        } else {
+            wp_die('reCAPTCHA secret key is not set. Please contact the administrator.');
+        }
+
+
         // Get all submitted fields dynamically
         $email_content = '<!DOCTYPE html>
         <html>
